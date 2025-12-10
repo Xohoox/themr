@@ -12,13 +12,13 @@ const (
 )
 
 type Position struct {
-	X int
-	Y int
+	X int	`yaml:x`
+	Y int	`yaml:y`
 }
 
 type MonitorMode struct {
-	Width int
-	Height int
+	Width int	`yaml:width`
+	Height int	`yaml:height`
 }
 
 func (position Position) String() string {
@@ -30,11 +30,11 @@ func (mode MonitorMode) String() string {
 }
 
 type Monitor struct {
-	Output string
-	Primary bool
-	Enabled bool
+	Output string		`yaml:output`
+	Primary bool		`yaml:primary`
+	Enabled bool		`yaml:enabled`
 	// Refresh bool
-	Rotation Rotation
-	Position Position
-	Mode MonitorMode
+	Rotation Rotation	`yaml:rotation`
+	Position Position	`yaml:position`
+	Mode MonitorMode	`yaml:mode`
 }

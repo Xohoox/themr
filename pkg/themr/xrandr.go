@@ -27,46 +27,26 @@ func executeXrandr(args ...string) (string, error) {
 	return string(output), nil
 }
 
-func parseMonitor(match []string) (Monitor, error) {
-	// Convert Width Height X and Y to int
-	indices := []int{4, 5, 6, 7}
-	values := make([]int, len(indices))
+func getInt(str string) int {
+	v, err := strconv.Atoi(str)
 
-	for i, idx := range indices {
-		v, err := strconv.Atoi(match[idx])
-		if err != nil {
-			return Monitor{}, err
-		}
-		values[i] = v
+	if err != nil {
+		return 0
 	}
 
-	monitor := Monitor { 
-		Output: match[3],
-		Primary: len(match[1]) == 1,
-		Enabled: len(match[2]) == 1,
-		Mode: MonitorMode {
-			Width: values[0],
-			Height: values[1],
-		},
-		Position: Position{
-			X: values[2],
-			Y: values[3],
-		},
-	}
-
-	return monitor, nil
+	return v
 }
 
-func GetMonitors() ([]Monitor, error) {
-	output, err := executeXrandr("--listmonitors")
+func GetAllMonitors() ([]Monitor, error) {
 	monitors := []Monitor{}
+	output, err := executeXrandr()
 
 	if err != nil {
 		return  nil, err
 	}
 
 	lines := strings.Split(output, "\n")
-	re := regexp.MustCompile(`\d+:\s+(\+?)(\*?)(\S+)\s+(\d+)\/\d+x(\d+)\/\d+\+(\d+)\+(\d+)`)
+	re := regexp.MustCompile(`^(\S+)\s+(dis)?connected(\s+(primary)?\s*(\d+)x(\d+)\+(\d+)\+(\d+)\s+(left|right|inverted)?)?`)
 
 	for _, line := range lines {
 		match := re.FindStringSubmatch(line)
@@ -75,14 +55,35 @@ func GetMonitors() ([]Monitor, error) {
 			continue
 		}
 
-		monitor, err := parseMonitor(match)
+		// Skip not connected monitors
+		if match[2] == "dis" {
+			continue
+		}
 
-		if err != nil {
-			return nil, err
+		rotation := Rotation(match[9])
+
+		if rotation == "" {
+			rotation = RotationNormal
+		}
+
+		monitor := Monitor {
+			Output: match[1],
+			Primary: match[4] == "primary",
+			Enabled: len(match[3]) != 0,
+			Rotation: rotation,
+			Mode: MonitorMode {
+				Width: getInt(match[5]),
+				Height: getInt(match[6]),
+			},
+			Position: Position{
+				X: getInt(match[7]),
+				Y: getInt(match[8]),
+			},
 		}
 
 		monitors = append(monitors, monitor)
 	}
+
 	return monitors, nil
 }
 
@@ -98,7 +99,7 @@ func isOutputInMonitors(output string, monitors []Monitor) bool {
 func SetMonitors(monitors []Monitor) error {
 	var args []string
 
-	connectedMonitors, err := GetMonitors()
+	connectedMonitors, err := GetAllMonitors()
 
 	if err != nil {
 		return err

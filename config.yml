@@ -1,0 +1,24 @@
+wallpapers:
+    - name: Zima
+      wallpapers:
+        - mode: --center
+          path: /home/fynn/.config/wallpaper/zima.jpg
+          orientation: 0
+    - name: Test
+      wallpapers:
+        - mode: --center
+          path: /home/fynn/.config/wallpaper/test1.jpg
+          orientation: 0
+screen_profiles:
+    - name: laptop2
+      monitors:
+        - output: eDP-1
+          primary: true
+          enabled: true
+          rotation: normal
+          position:
+            x: 0
+            "y": 0
+          mode:
+            width: 2880
+            height: 1920

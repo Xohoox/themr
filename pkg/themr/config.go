@@ -1,18 +1,28 @@
 package themr
 
+import (
+	"os"
+	"gopkg.in/yaml.v3"
+)
+
 type WallpaperGroup struct {
-	Name string
-	Wallpapers []Wallpaper
+	Name string				`yaml:"name"`
+	Wallpapers []Wallpaper	`yaml:"wallpapers"`
 }
 
 type ScreenProfile struct {
-	Name string
-	Monitors []Monitor
+	Name string			`yaml:"name"`
+	Monitors []Monitor	`yaml:"monitors"`
 }
 
 type Config struct {
-	Wallpapers []WallpaperGroup
-	ScreenProfiles []ScreenProfile
+	Wallpapers []WallpaperGroup		`yaml:"wallpapers"`
+	ScreenProfiles []ScreenProfile	`yaml:"screen_profiles"`
+}
+
+func getConfigPath() string {
+	// TODO: implement
+	return "config.yml"
 }
 
 func readConfig() error {
@@ -21,8 +31,14 @@ func readConfig() error {
 }
 
 func writeConfig() error {
-	// TODO: write config to filesystem
-	return nil
+	yml, err := yaml.Marshal(&config)
+
+	if err != nil {
+		return  err
+	}
+
+	// TODO: Pretty Indentation
+	return os.WriteFile(getConfigPath(), yml, 0644)
 }
 
 var config = Config {
@@ -42,6 +58,39 @@ var config = Config {
 					Mode: MonitorMode {
 						Width: 2880,
 						Height: 1920,
+					},
+				},
+			},
+		},
+		ScreenProfile {
+			Name: "desk",
+			Monitors: []Monitor {
+				Monitor {
+					Output: "DP-10",
+					Primary: true,
+					Enabled: true,
+					Rotation: RotationLeft,
+					Position: Position {
+						X: 0,
+						Y: 0,
+					},
+					Mode: MonitorMode {
+						Width: 2560,
+						Height: 1440,
+					},
+				},
+				Monitor {
+					Output: "DP-11",
+					Primary: false,
+					Enabled: true,
+					Rotation: RotationNormal,
+					Position: Position {
+						X: 1440,
+						Y: 693,
+					},
+					Mode: MonitorMode {
+						Width: 2560,
+						Height: 1440,
 					},
 				},
 			},

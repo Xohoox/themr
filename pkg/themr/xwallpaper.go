@@ -24,9 +24,9 @@ const (
 )
 
 type Wallpaper struct {
-	Mode WallpaperMode
-	Path string
-	Orientation WallpaperOrientation
+	Mode WallpaperMode					`yaml:wallpaperMode`
+	Path string							`yaml:path`
+	Orientation WallpaperOrientation	`yaml:orientation`
 }
 
 const xwallpaperCommand = "xwallpaper"
