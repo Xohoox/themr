@@ -1,6 +1,7 @@
 package themr
 
 import (
+	"math/rand/v2"
 	"errors"
 	"fmt"
 )
@@ -30,17 +31,53 @@ func selectWallpaperGroupFromConfig(wallpaperGroup string) (*WallpaperGroup, err
 	return new(WallpaperGroup), errors.New("WallpaperGroup: " + wallpaperGroup + " is not in the config")
 }
 
-func SelectWallpaper(wallpaperGroup string) error {
-	wallpaper, err := selectWallpaperGroupFromConfig(wallpaperGroup)
-	_ = wallpaper
+func getRandomWallpaper(group *WallpaperGroup, rotation Rotation) (Wallpaper, error) {
+	var wallpaper []Wallpaper
+	orientation := HorizontalOrientation
+
+	if rotation == RotationLeft || rotation == RotationRight {
+		orientation = VerticalOrientation
+	}
+
+	for _, v := range group.Wallpapers {
+		if v.Orientation == orientation {
+			wallpaper = append(wallpaper, v)
+		}
+	}
+
+	if len(wallpaper) == 0 {
+		return Wallpaper{}, errors.New("No Wallpaper with Orientation " + string(orientation) + " in Group: " + group.Name)
+	}
+
+	return wallpaper[rand.IntN(len(wallpaper))], nil
+}
+
+func SelectWallpaper(wallpaperGroupName string) error {
+	wallpaperGroup, err := selectWallpaperGroupFromConfig(wallpaperGroupName)
 
 	if err != nil {
 		return err
 	}
 
-	// TODO: implement
+	monitors, err := GetActiveMonitors()
 
-	return nil
+	if err != nil {
+		return err
+	}
+
+	wallpapers := []Wallpaper{};
+
+	for _, monitor := range monitors {
+		wallpaper, err := getRandomWallpaper(wallpaperGroup, monitor.Rotation)
+
+		if err != nil {
+			return err
+		}
+
+		wallpapers = append(wallpapers, wallpaper)
+	}
+
+	return SetWallpaper(wallpapers, monitors)
 }
 
 func RenameWallpaper(oldName, newName string) error {

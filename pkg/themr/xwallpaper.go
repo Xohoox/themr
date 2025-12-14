@@ -16,11 +16,11 @@ const (
 	ZoomMode WallpaperMode = "--zoom"
 )
 
-type WallpaperOrientation int
+type WallpaperOrientation string
 
 const (
-	HorizontalOrientation WallpaperOrientation = iota
-	VerticalOrientation
+	HorizontalOrientation WallpaperOrientation = "horizontal"
+	VerticalOrientation WallpaperOrientation = "vertical"
 )
 
 type Wallpaper struct {

@@ -103,6 +103,7 @@ var config = Config {
 				Wallpaper {
 					Mode: CenterMode,
 					Path: "/home/fynn/.config/wallpaper/zima.jpg",
+					Orientation: HorizontalOrientation,
 				},
 			},
 		},
@@ -112,6 +113,7 @@ var config = Config {
 				Wallpaper {
 					Mode: CenterMode,
 					Path: "/home/fynn/.config/wallpaper/test1.jpg",
+					Orientation: HorizontalOrientation,
 				},
 			},
 		},

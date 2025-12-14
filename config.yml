@@ -3,14 +3,14 @@ wallpapers:
       wallpapers:
         - mode: --center
           path: /home/fynn/.config/wallpaper/zima.jpg
-          orientation: 0
+          orientation: horizontal
     - name: Test
       wallpapers:
         - mode: --center
           path: /home/fynn/.config/wallpaper/test1.jpg
-          orientation: 0
+          orientation: horizontal
 screen_profiles:
-    - name: laptop2
+    - name: laptop
       monitors:
         - output: eDP-1
           primary: true
@@ -22,3 +22,25 @@ screen_profiles:
           mode:
             width: 2880
             height: 1920
+    - name: scheibtisch
+      monitors:
+        - output: DP-10
+          primary: true
+          enabled: true
+          rotation: left
+          position:
+            x: 0
+            "y": 0
+          mode:
+            width: 2560
+            height: 1440
+        - output: DP-11
+          primary: false
+          enabled: true
+          rotation: normal
+          position:
+            x: 1440
+            "y": 693
+          mode:
+            width: 2560
+            height: 1440

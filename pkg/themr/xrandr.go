@@ -87,6 +87,23 @@ func GetAllMonitors() ([]Monitor, error) {
 	return monitors, nil
 }
 
+func GetActiveMonitors() ([]Monitor, error) {
+	activeMonitors := []Monitor{}
+	allMonitors, err := GetAllMonitors()
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, monitor := range allMonitors {
+		if monitor.Enabled {
+			activeMonitors = append(activeMonitors, monitor)
+		}
+	}
+
+	return activeMonitors, nil
+}
+
 func isOutputInMonitors(output string, monitors []Monitor) bool {
 	for _, monitor := range monitors {
 		if monitor.Output == output {
