@@ -37,7 +37,13 @@ func SelectScreenProfile(screenProfileName string) error {
 		return err
 	}
 
-	return SetMonitors(screenProfile.Monitors)
+	err = SetMonitors(screenProfile.Monitors)
+
+	if err != nil {
+		return err
+	}
+
+	return SelectWallpaper(config.DefaultWallpaper)
 }
 
 func RenameScreenProfile(oldName, newName string) error {

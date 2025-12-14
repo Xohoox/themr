@@ -18,6 +18,7 @@ type ScreenProfile struct {
 type Config struct {
 	Wallpapers []WallpaperGroup		`yaml:"wallpapers"`
 	ScreenProfiles []ScreenProfile	`yaml:"screen_profiles"`
+	DefaultWallpaper string			`yaml:"defaultWallpapers"`
 }
 
 func getConfigPath() string {
@@ -25,12 +26,22 @@ func getConfigPath() string {
 	return "config.yml"
 }
 
-func readConfig() error {
-	// TODO: read config from filesystem
+func ReadConfig() error {
+	data, err := os.ReadFile(getConfigPath())
+
+	if err != nil {
+		return err
+	}
+
+	if err := yaml.Unmarshal(data, &config); err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func writeConfig() error {
+	// TODO: Check config
 	yml, err := yaml.Marshal(&config)
 
 	if err != nil {
@@ -41,81 +52,4 @@ func writeConfig() error {
 	return os.WriteFile(getConfigPath(), yml, 0644)
 }
 
-var config = Config {
-	ScreenProfiles: []ScreenProfile {
-		ScreenProfile {
-			Name: "laptop",
-			Monitors: []Monitor {
-				Monitor {
-					Output: "eDP-1",
-					Primary: true,
-					Enabled: true,
-					Rotation: RotationNormal,
-					Position: Position {
-						X: 0,
-						Y: 0,
-					},
-					Mode: MonitorMode {
-						Width: 2880,
-						Height: 1920,
-					},
-				},
-			},
-		},
-		ScreenProfile {
-			Name: "desk",
-			Monitors: []Monitor {
-				Monitor {
-					Output: "DP-10",
-					Primary: true,
-					Enabled: true,
-					Rotation: RotationLeft,
-					Position: Position {
-						X: 0,
-						Y: 0,
-					},
-					Mode: MonitorMode {
-						Width: 2560,
-						Height: 1440,
-					},
-				},
-				Monitor {
-					Output: "DP-11",
-					Primary: false,
-					Enabled: true,
-					Rotation: RotationNormal,
-					Position: Position {
-						X: 1440,
-						Y: 693,
-					},
-					Mode: MonitorMode {
-						Width: 2560,
-						Height: 1440,
-					},
-				},
-			},
-		},
-	},
-	Wallpapers: []WallpaperGroup {
-		WallpaperGroup {
-			Name: "Zima",
-			Wallpapers: []Wallpaper {
-				Wallpaper {
-					Mode: CenterMode,
-					Path: "/home/fynn/.config/wallpaper/zima.jpg",
-					Orientation: HorizontalOrientation,
-				},
-			},
-		},
-		WallpaperGroup {
-			Name: "Test",
-			Wallpapers: []Wallpaper {
-				Wallpaper {
-					Mode: CenterMode,
-					Path: "/home/fynn/.config/wallpaper/test1.jpg",
-					Orientation: HorizontalOrientation,
-				},
-			},
-		},
-	},
-}
+var config = Config{}

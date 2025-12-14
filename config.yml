@@ -4,11 +4,23 @@ wallpapers:
         - mode: --center
           path: /home/fynn/.config/wallpaper/zima.jpg
           orientation: horizontal
+        - mode: --focus
+          path: /home/fynn/.config/wallpaper/zima_vertical.jpg
+          orientation: vertical
     - name: Test
       wallpapers:
         - mode: --center
           path: /home/fynn/.config/wallpaper/test1.jpg
           orientation: horizontal
+        - mode: --center
+          path: /home/fynn/.config/wallpaper/test3.jpg
+          orientation: horizontal
+        - mode: --center
+          path: /home/fynn/.config/wallpaper/test2.jpg
+          orientation: vertical
+        - mode: --center
+          path: /home/fynn/.config/wallpaper/test4.jpg
+          orientation: vertical
 screen_profiles:
     - name: laptop
       monitors:
@@ -22,7 +34,7 @@ screen_profiles:
           mode:
             width: 2880
             height: 1920
-    - name: scheibtisch
+    - name: desk
       monitors:
         - output: DP-10
           primary: true
@@ -44,3 +56,4 @@ screen_profiles:
           mode:
             width: 2560
             height: 1440
+defaultWallpapers: Zima

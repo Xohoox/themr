@@ -7,6 +7,11 @@ import (
 )
 
 func main() {
+
+	if err := themr.ReadConfig(); err != nil {
+		fmt.Println(err)
+	}
+
 	if len(os.Args) < 2 {
 		fmt.Println("expected 'screenProfile', 'theme' or 'wallpaper' as subcommand! Use --help for more information")
 		os.Exit(1)
@@ -31,8 +36,7 @@ func main() {
 				os.Exit(1)
 			}
 
-			err := themr.SelectScreenProfile(os.Args[3])
-			if err != nil {
+			if err := themr.SelectScreenProfile(os.Args[3]); err != nil {
 				fmt.Println(err)
 				os.Exit(1)
 			}
@@ -41,9 +45,8 @@ func main() {
 				fmt.Println("Expected 4 arguments for screenProfile select! Use --help for more information")
 				os.Exit(1)
 			}
-			
-			err := themr.RenameScreenProfile(os.Args[3], os.Args[4])
-			if err != nil {
+
+			if err := themr.RenameScreenProfile(os.Args[3], os.Args[4]); err != nil {
 				fmt.Println(err)
 				os.Exit(1)
 			}
@@ -69,8 +72,7 @@ func main() {
 				os.Exit(1)
 			}
 
-			err := themr.SelectWallpaper(os.Args[3])
-			if err != nil {
+			if	err := themr.SelectWallpaper(os.Args[3]); err != nil {
 				fmt.Println(err)
 				os.Exit(1)
 			}
@@ -80,8 +82,7 @@ func main() {
 				os.Exit(1)
 			}
 			
-			err := themr.RenameWallpaper(os.Args[3], os.Args[4])
-			if err != nil {
+			if err := themr.RenameWallpaper(os.Args[3], os.Args[4]); err != nil {
 				fmt.Println(err)
 				os.Exit(1)
 			}
