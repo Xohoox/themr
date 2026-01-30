@@ -8,11 +8,13 @@ import (
 type WallpaperGroup struct {
 	Name string				`yaml:"name"`
 	Wallpapers []Wallpaper	`yaml:"wallpapers"`
+	InitScript string		`yaml:initscript"`
 }
 
 type ScreenProfile struct {
 	Name string			`yaml:"name"`
 	Monitors []Monitor	`yaml:"monitors"`
+	InitScript string	`yaml:initscript"`
 }
 
 type Config struct {

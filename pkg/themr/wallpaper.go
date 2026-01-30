@@ -1,9 +1,10 @@
 package themr
 
 import (
-	"math/rand/v2"
 	"errors"
 	"fmt"
+	"math/rand/v2"
+	"os/exec"
 )
 
 func ListWallpapers() {
@@ -77,7 +78,20 @@ func SelectWallpaper(wallpaperGroupName string) error {
 		wallpapers = append(wallpapers, wallpaper)
 	}
 
-	return SetWallpaper(wallpapers, monitors)
+	err = SetWallpaper(wallpapers, monitors)
+
+	if err != nil {
+		return  err
+	}
+
+	command := exec.Command(wallpaperGroup.InitScript)
+	_, err = command.Output()
+
+	if err != nil {
+		return errors.Join(err, errors.New("Error executing: " + wallpaperGroup.InitScript))
+	}
+
+	return nil
 }
 
 func RenameWallpaper(oldName, newName string) error {

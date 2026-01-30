@@ -3,6 +3,7 @@ package themr
 import (
 	"errors"
 	"fmt"
+	"os/exec"
 )
 
 func ListScreenProfile() {
@@ -43,7 +44,20 @@ func SelectScreenProfile(screenProfileName string) error {
 		return err
 	}
 
-	return SelectWallpaper(config.DefaultWallpaper)
+	err = SelectWallpaper(config.DefaultWallpaper)
+
+	if err != nil {
+		return err
+	}
+
+	command := exec.Command(screenProfile.InitScript)
+	_, err = command.Output()
+
+	if err != nil {
+		return errors.Join(err, errors.New("Error executing: " + screenProfile.InitScript))
+	}
+
+	return  nil
 }
 
 func AddCurrentScreenProfile(name string) error {
