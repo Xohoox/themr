@@ -21,13 +21,52 @@ type Config struct {
 	DefaultWallpaper string			`yaml:"defaultWallpapers"`
 }
 
-func getConfigPath() string {
-	// TODO: implement
-	return "config.yml"
+func getConfigPath() (string, error) {
+	configFile := ""
+	themrEnvVar := os.Getenv("THEMR_CONFIG_DIR")
+	xdgEnvVar := os.Getenv("XDG_CONFIG_HOME")
+	homeEnvVar := os.Getenv("HOME")
+
+	if themrEnvVar != "" {
+		if err := os.MkdirAll(themrEnvVar, os.ModePerm); err != nil {
+			return  "", err
+		}
+		configFile = themrEnvVar + "/themr.yml"
+	} else if xdgEnvVar != "" {
+		if _, err := os.Stat(xdgEnvVar); err != nil {
+			return "", err
+		}
+		if err := os.MkdirAll(xdgEnvVar + "/themr", os.ModePerm); err != nil {
+			return  "", err
+		}
+		configFile = xdgEnvVar + "/themr/themr.yml"
+	} else {
+		if _, err := os.Stat(homeEnvVar + "/.config"); err != nil {
+			configFile = homeEnvVar + "/.themr.yml"
+		} else {
+			if err := os.MkdirAll(homeEnvVar + "/.config/themr", os.ModePerm); err != nil {
+				return  "", err
+			}
+			configFile = homeEnvVar + "/.config/themr/themr.yml"
+		}
+	}
+
+	return configFile, nil
 }
 
 func ReadConfig() error {
-	data, err := os.ReadFile(getConfigPath())
+	configFile, err := getConfigPath()
+
+	if err != nil {
+		return err
+	}
+
+	if _, err := os.Stat(configFile); err != nil {
+		config = Config{}
+		return nil
+	}
+
+	data, err := os.ReadFile(configFile)
 
 	if err != nil {
 		return err
@@ -48,8 +87,14 @@ func writeConfig() error {
 		return  err
 	}
 
+	configFile, err := getConfigPath()
+
+	if err != nil {
+		return err
+	}
+
 	// TODO: Pretty Indentation
-	return os.WriteFile(getConfigPath(), yml, 0644)
+	return os.WriteFile(configFile, yml, 0644)
 }
 
 var config = Config{}

@@ -40,6 +40,16 @@ func main() {
 				fmt.Println(err)
 				os.Exit(1)
 			}
+		case "addCurrent":
+			if len(os.Args) != 4 {
+				fmt.Println("Expected 3 arguments for screenProfile add! Use --help for more information")
+				os.Exit(1)
+			}
+
+			if err := themr.AddCurrentScreenProfile(os.Args[3]); err != nil {
+				fmt.Println(err)
+				os.Exit(1)
+			}
 		case "rename":
 			if len(os.Args) != 5 {
 				fmt.Println("Expected 4 arguments for screenProfile select! Use --help for more information")

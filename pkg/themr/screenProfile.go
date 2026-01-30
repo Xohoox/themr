@@ -46,6 +46,23 @@ func SelectScreenProfile(screenProfileName string) error {
 	return SelectWallpaper(config.DefaultWallpaper)
 }
 
+func AddCurrentScreenProfile(name string) error {
+	montors, err := GetActiveMonitors()
+
+	if err != nil {
+		return err
+	}
+
+	screenProfile := ScreenProfile{
+		Name: name,
+		Monitors: montors,
+	}
+
+	config.ScreenProfiles = append(config.ScreenProfiles, screenProfile)
+
+	return writeConfig()
+}
+
 func RenameScreenProfile(oldName, newName string) error {
 	screenProfile, err := selectScreenProfileFromConfig(oldName)
 
