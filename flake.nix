@@ -13,7 +13,7 @@
       version = "0.1.0";
       src = self;
       subPackages = [ "cmd/themr" ];
-      vendorHash = null;
+      vendorHash = "sha256-g+yaVIx4jxpAQ/+WrGKxhVeliYx7nLQe/zsGpxV4Fn4=";
     };
   };
 }
