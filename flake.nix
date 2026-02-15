@@ -10,7 +10,7 @@
   in {
     packages.${system}.default = pkgs.buildGoModule {
       pname = "themr";
-      version = "0.1.0";
+      version = "0.1.1";
       src = self;
       subPackages = [ "cmd/themr" ];
       vendorHash = "sha256-g+yaVIx4jxpAQ/+WrGKxhVeliYx7nLQe/zsGpxV4Fn4=";
