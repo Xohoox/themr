@@ -84,6 +84,10 @@ func SelectWallpaper(wallpaperGroupName string) error {
 		return  err
 	}
 
+	if wallpaperGroup.InitScript == "" {
+		return nil
+	}
+
 	command := exec.Command(wallpaperGroup.InitScript)
 	_, err = command.Output()
 

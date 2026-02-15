@@ -50,6 +50,10 @@ func SelectScreenProfile(screenProfileName string) error {
 		return err
 	}
 
+	if screenProfile.InitScript == "" {
+		return nil
+	}
+
 	command := exec.Command(screenProfile.InitScript)
 	_, err = command.Output()
 
